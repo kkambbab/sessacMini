@@ -1,8 +1,10 @@
 # 미니 프로젝트
 <br><br>
 
+
 # 1. HTTP, WP, MySQL 한 서버에서 연결
 <br><br>
+
 
 ## 1-1. 기본 도구 설치
 <br>
@@ -38,5 +40,15 @@ yum install php-mysqlnd
 ```
 <br><br>
 
-## 2-1 Apache 웹 서버 연결
-### 1) 
+
+## 2-1 Apache, WP 설정
+<br>
+
+### 1) Apache 웹 서버
+웹 서버 시작 및 방화벽 허용
+```
+systemctl start httpd
+```
+```
+firewall-cmd --add-service=http
+```
