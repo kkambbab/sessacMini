@@ -52,3 +52,11 @@ systemctl start httpd
 ```
 firewall-cmd --add-service=http
 ```
+### 2) 워드프레스 압축해제
+```
+tar xvf wordpress.tar.gz -C /var/www/html
+```
+```
+ls /var/www/html # 확인용
+```
+### 
