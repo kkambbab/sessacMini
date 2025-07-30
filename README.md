@@ -2,6 +2,7 @@
 <br><br>
 
 
+---
 # 1. HTTP, WP, MySQL 한 서버에서 연결
 <br><br>
 
@@ -136,6 +137,7 @@ exit
 <br><br>
 
 
+---
 # 2. MySQL을 다른 서버로 분리
 <br><br>
 
@@ -262,6 +264,7 @@ define( 'DB_COLLATE', '' );
 <br><br>
 
 
+---
 # 3. HTTP, WP, MySQL 한 서버에서 연결
 <br><br>
 
