@@ -217,7 +217,7 @@ CREATE USER 'wp-user'@'192.168.57.1' IDENTIFIED BY 'P@ssw0rd';
 GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.1';
 ```
 
-[왜 57.1인가?](#왜-57-1인가)
+[왜 57.1인가?](#왜-571인가)
 
 ```
 FLUSH PRIVILEGES;
