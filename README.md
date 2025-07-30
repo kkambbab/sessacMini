@@ -107,4 +107,20 @@ systemctl restart httpd
 <br><br>
 
 
-## 3.1 
+## 3.1 db설정
+<br>
+
+### 1) MySQLD 시작
+```
+systemctl start mysqld
+```
+### 2) Apache의 외부 DB 접속 허용
+```
+setsebool -P httpd_can_network_connect_db 1
+```
+<br><br>
+
+
+# 2. MySQL을 다른 서버로 분리
+
+
