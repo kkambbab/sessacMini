@@ -320,6 +320,13 @@ define( 'DB_COLLATE', '' );
 
 
 ## 왜 57.1인가?
+[root@server ~]# telnet 192.168.57.13 3306
+Connected to 192.168.57.13.
+Escape character is '^]'.
+EHost '192.168.57.1' is not allowed to connect to this MySQL serverConnection closed by foreign host.
+
+웹 서버는 192.168.57.1로 접속을 시도하고있다.
+
 [root@server ~]# ip route get 192.168.57.13
 192.168.57.13 via 10.0.2.2 dev enp0s3 src 10.0.2.15 uid 0
     cache
@@ -328,9 +335,6 @@ define( 'DB_COLLATE', '' );
 ChatGPT의 말:
 ip route get 192.168.57.13 결과를 보면,
 
-css
-복사
-편집
 192.168.57.13 via 10.0.2.2 dev enp0s3 src 10.0.2.15 uid 0
 이 뜻은:
 
