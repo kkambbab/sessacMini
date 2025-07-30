@@ -223,7 +223,11 @@ FLUSH PRIVILEGES;
 exit
 ```
 ### 4) sql 방화벽 허용
+```
 firewall-cmd --permanent --add-service=mysql
+```
+<br><br>
+
 
 ## 2-3 웹 서버 워드프레스 설정 (웹 서버)
 <br>
