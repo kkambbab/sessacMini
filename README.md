@@ -60,7 +60,8 @@ tar xvf wordpress.tar.gz -C /var/www/html
 ls /var/www/html # 확인용
 ```
 ### 3) 워드프레스 설정파일에서 db정보 입력
-압축을 해제하면 cofig-sample.php 파일이 나온다 복사하여 config파일 생성
+WordPress 압축을 해제하면 `wp-config-sample.php` 파일이 있
+이를 복사해 실제 설정 파일인 `wp-config.php`로 만든 후, 아래와 같이 DB 정보를 입력
 ```
 cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
 ```
@@ -84,3 +85,26 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
+### 4) 가상 호스트 설정
+```
+vi /etc/httpd/conf.d/wordpress.conf
+```
+```
+<VirtualHost *:80>
+        ServerName example.com
+        DocumentRoot    /var/www/html/wordpress
+
+        <Directory      "/var/www/html/wordpress">
+                AllowOverride All
+        </Directory>
+
+</Virtualhost>
+```
+### 5) 설정 적용
+```
+systemctl restart httpd
+```
+<br><br>
+
+
+## 3.1 
