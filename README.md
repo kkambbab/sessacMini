@@ -36,6 +36,7 @@ MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서�
 ```
 yum install php-mysqlnd
 ```
+<br><br>
 
 ## 2-1 Apache 웹 서버 연결
 ### 1) 
