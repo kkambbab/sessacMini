@@ -118,9 +118,142 @@ systemctl start mysqld
 ```
 setsebool -P httpd_can_network_connect_db 1
 ```
+### 3) mysql 안에 유저 데이터 삽입
+```
+create database wp;
+```
+```
+create user 'wp-user'@'192.168.56.44' identified by 'P@ssw0rd';
+```
+```
+grant all privileges on wp.* to 'wp-user'@'192.168.56.44';
+```
+```
+exit
+```
+
+
 <br><br>
 
 
 # 2. MySQL을 다른 서버로 분리
+<br><br>
 
 
+## 2-1 원래 서버에 있던 MySQL삭제 및 새로운 db서버 설치 (웹 서버)
+<br>
+
+### 1) 새로운 db서버 init파일
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+vm_image = "nobreak-labs/rocky-9"
+vm_subnet = "192.168.57."
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "db1" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "db1"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "13", nic_type: "virtio"
+    node.vm.hostname = "db1"
+  end
+
+  config.vm.define "db2" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "db2"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "14", nic_type: "virtio"
+    node.vm.hostname = "db2"
+  end
+end
+
+```
+### 2) 기존 서버 db삭제
+```
+systemctl stop mysqld
+```
+```
+yum remove mysql mysql-server
+```
+### 3) MySQL, MySQL-Server 설치
+데이터베이스에 접속하고 쿼리를 날릴 수 있는 도구
+```
+yum install -y mysql mysql-server
+```
+<br><br>
+
+
+## 2-2 새로운 db서버 MySQL설정 (db서버 - db1)
+<br>
+
+### 1) MySQL, MySQL-Server 설치
+데이터베이스에 접속하고 쿼리를 날릴 수 있는 도구
+```
+yum install -y mysql mysql-server
+```
+### 2) MySQL 시작
+```
+systemctl start mysqld
+```
+### 3) MySQL 안에 유저 데이터 삽입
+```
+create database wp;
+```
+```
+CREATE USER 'wp-user'@'192.168.57.1' IDENTIFIED BY 'P@ssw0rd';
+```
+```
+GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.1';
+```
+```
+FLUSH PRIVILEGES;
+```
+```
+exit
+```
+### 4) sql 방화벽 허용
+firewall-cmd --permanent --add-service=mysql
+
+## 2-3 웹 서버 워드프레스 설정 (웹 서버)
+<br>
+
+### 1) 워드 프레스 설정 변경
+```
+vi /var/www/html/wordpress/wp-config.php
+```
+```
+// ** Database settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wp' );
+
+/** Database username */
+define( 'DB_USER', 'wp-user' );
+
+/** Database password */
+define( 'DB_PASSWORD', 'P@ssw0rd' );
+
+/** Database hostname */
+define( 'DB_HOST', '192.168.57.13' );
+
+/** Database charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
+
+/** The database collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
+```
+<br><br>
+
+
+# 3. HTTP, WP, MySQL 한 서버에서 연결
+<br><br>
