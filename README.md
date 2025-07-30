@@ -1,6 +1,6 @@
-# 미니 프로젝트
-# 1. HTTP, WP, MySQL 한 서버에서 연결
-## 1-1. 기본 도구 설치
+# 미니 프로젝트<br>
+# 1. HTTP, WP, MySQL 한 서버에서 연결<br>
+## 1-1. 기본 도구 설치<br>
 ### 1) Apache 웹 서버(httpd) 설치
 ```
 yum install -y httpd
