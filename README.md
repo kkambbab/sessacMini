@@ -5,3 +5,8 @@
 ```
 yum install -y httpd
 ```
+### 워드 프레스 압축파일 가져오기
+curl / 다운도르 시 저장할 이름 / 워드프레스 최신 버전 압축파일 다운로드 url
+```
+curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz
+```
