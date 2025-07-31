@@ -12,7 +12,7 @@
 
 ### 1) Apache 웹 서버(httpd) 설치
 ```
-yum install -y httpd
+sudo yum install -y httpd
 ```
 ### 2) WordPress 최신 버전 압축 파일 다운로드
 curl / -o 다운도르 시 저장할 이름 / 워드프레스 최신 버전 압축파일 다운로드 url
@@ -22,22 +22,22 @@ curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz
 ### 3) MySQL 클라이언트 설치
 데이터베이스에 접속하고 쿼리를 날릴 수 있는 도구
 ```
-yum install -y mysql
+sudo yum install -y mysql
 ```
 ### 4) MySQL-Server 설치
 실제 데이터 저장과 쿼리 처리를 담당하는 DB 서버 프로그램
 ```
-yum install -y mysql-server
+sudo yum install -y mysql-server
 ```
 ### 5) php 설치
 워드 프레스는 PHP로 작성되어있어서 php를 설치가 필수
 ```
-yum install -y php
+sudo yum install -y php
 ```
 ### PHP-MySQLND
 MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서버에 직접 연결할 수 있게 해줌
 ```
-yum install php-mysqlnd
+sudo yum install -y php-mysqlnd
 ```
 <br><br>
 
@@ -48,14 +48,14 @@ yum install php-mysqlnd
 ### 1) Apache 웹 서버
 웹 서버 시작 및 방화벽 허용
 ```
-systemctl start httpd
+sudo systemctl start httpd
 ```
 ```
-firewall-cmd --add-service=http
+sudo firewall-cmd --add-service=http
 ```
 ### 2) 워드프레스 압축해제
 ```
-tar xvf wordpress.tar.gz -C /var/www/html
+sudo tar xvf wordpress.tar.gz -C /var/www/html
 ```
 ```
 ls /var/www/html # 확인용
@@ -64,7 +64,10 @@ ls /var/www/html # 확인용
 WordPress 압축을 해제하면 `wp-config-sample.php` 파일이 있
 이를 복사해 실제 설정 파일인 `wp-config.php`로 만든 후, 아래와 같이 DB 정보를 입력
 ```
-cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+sudo cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+```
+```
+sudo vi /var/www/html/wordpress/wp-config.php
 ```
 ```
 // ** Database settings - You can get this info from your web host ** //
@@ -88,7 +91,7 @@ define( 'DB_COLLATE', '' );
 ```
 ### 4) 가상 호스트 설정
 ```
-vi /etc/httpd/conf.d/wordpress.conf
+sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
 ```
 <VirtualHost *:80>
@@ -103,7 +106,7 @@ vi /etc/httpd/conf.d/wordpress.conf
 ```
 ### 5) 설정 적용
 ```
-systemctl restart httpd
+sudo systemctl restart httpd
 ```
 <br><br>
 
@@ -181,42 +184,43 @@ Vagrant.configure("2") do |config|
 end
 
 ```
-### 2) 기존 서버 db삭제
+### 2) 기존 서버 db삭제 (웹 서버)
 ```
-systemctl stop mysqld
+sudo systemctl stop mysqld
 ```
 ```
-yum remove mysql mysql-server
-```
-### 3) MySQL, MySQL-Server 설치
-데이터베이스에 접속하고 쿼리를 날릴 수 있는 도구
-```
-yum install -y mysql mysql-server
+sudo yum remove mysql mysql-server
 ```
 <br><br>
 
 
-## 2-2 새로운 db서버 MySQL설정 (db서버 - db1)
+## 2-2 새로운 db서버 MySQL설정 (db서버)
 <br>
 
 ### 1) MySQL, MySQL-Server 설치
 데이터베이스에 접속하고 쿼리를 날릴 수 있는 도구
 ```
-yum install -y mysql mysql-server
+sudo yum install -y mysql mysql-server
 ```
 ### 2) MySQL 시작
 ```
-systemctl start mysqld
+sudo systemctl start mysqld
+```
+```
+sudo systemctl enable mysqld
 ```
 ### 3) MySQL 안에 유저 데이터 삽입
+```
+sudo mysql
+```
 ```
 create database wp;
 ```
 ```
-CREATE USER 'wp-user'@'192.168.57.1' IDENTIFIED BY 'P@ssw0rd';
+CREATE USER 'wp-user'@'192.168.57.13' IDENTIFIED BY 'P@ssw0rd';
 ```
 ```
-GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.1';
+GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.13';
 ```
 
 [왜 57.1인가?](#왜-571인가)
@@ -229,7 +233,10 @@ exit
 ```
 ### 4) sql 방화벽 허용
 ```
-firewall-cmd --permanent --add-service=mysql
+sudo firewall-cmd --permanent --add-service=mysql
+```
+```
+sudo firewall-cmd --permanent --reload
 ```
 <br><br>
 
@@ -239,7 +246,7 @@ firewall-cmd --permanent --add-service=mysql
 
 ### 1) 워드 프레스 설정 변경
 ```
-vi /var/www/html/wordpress/wp-config.php
+sudo vi /var/www/html/wordpress/wp-config.php
 ```
 ```
 // ** Database settings - You can get this info from your web host ** //
