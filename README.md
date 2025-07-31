@@ -21,7 +21,6 @@ Vagrant.configure("2") do |config|
     end
 
     node.vm.network "private_network", ip: vm_subnet + "56.44", nic_type: "virtio"
-    node.vm.network "private_network", ip: vm_subnet + "57.44", nic_type: "virtio"
     node.vm.hostname = "web1"
   end
 
@@ -34,7 +33,6 @@ Vagrant.configure("2") do |config|
     end
 
     node.vm.network "private_network", ip: vm_subnet + "56.45", nic_type: "virtio"
-    node.vm.network "private_network", ip: vm_subnet + "57.44", nic_type: "virtio"
     node.vm.hostname = "web2"
   end
 end
@@ -208,7 +206,6 @@ Vagrant.configure("2") do |config|
     end
 
     node.vm.network "private_network", ip: vm_subnet + "57.13", nic_type: "virtio"
-    node.vm.network "private_network", ip: vm_subnet + "56.13", nic_type: "virtio"
     node.vm.hostname = "db1"
   end
 
@@ -221,7 +218,6 @@ Vagrant.configure("2") do |config|
     end
 
     node.vm.network "private_network", ip: vm_subnet + "57.14", nic_type: "virtio"
-    node.vm.network "private_network", ip: vm_subnet + "56.13", nic_type: "virtio"
     node.vm.hostname = "db2"
   end
 end
