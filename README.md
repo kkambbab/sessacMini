@@ -375,6 +375,7 @@ backend http_back
 
 ## 3-3. 로드밸런서 서비스 시작
 <br>
+
 ```
 sudo systemctl enable haproxy
 ```
