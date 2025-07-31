@@ -147,6 +147,10 @@ sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
 sudo systemctl restart httpd
 ```
+### 6) sebool http와 db 연결 설정
+```
+sudo setsebool -P httpd_can_network_connect_db 1
+```
 <br><br>
 
 
@@ -276,11 +280,6 @@ sudo firewall-cmd --permanent --add-service=mysql
 ```
 ```
 sudo firewall-cmd --reload
-```
-
-### 5) sebool http와 db 연결 설정
-```
-sudo setsebool -P httpd_can_network_connect_db 1
 ```
 <br><br>
 
