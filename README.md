@@ -260,10 +260,10 @@ sudo mysql
 create database wp;
 ```
 ```
-CREATE USER 'wp-user'@'192.168.57.13' IDENTIFIED BY 'P@ssw0rd';
+CREATE USER 'wp-user'@'192.168.56.44' IDENTIFIED BY 'P@ssw0rd';
 ```
 ```
-GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.13';
+GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.56.44';
 ```
 
 [만약 57.1로 나간다면?](#왜-571인가)
