@@ -264,7 +264,7 @@ CREATE USER 'wp-user'@'192.168.57.13' IDENTIFIED BY 'P@ssw0rd';
 GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.13';
 ```
 
-[왜 57.1로 나간다면?](#왜-571인가)
+[만약 57.1로 나간다면?](#왜-571인가)
 
 ```
 FLUSH PRIVILEGES;
@@ -277,7 +277,12 @@ exit
 sudo firewall-cmd --permanent --add-service=mysql
 ```
 ```
-sudo firewall-cmd --permanent --reload
+sudo firewall-cmd --reload
+```
+
+### 5) sebool http와 db 연결 설정
+```
+sudo setsebool -P httpd_can_network_connect_db 1
 ```
 <br><br>
 
