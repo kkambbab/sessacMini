@@ -586,10 +586,10 @@ sudo vi /etc/exports
 ```
 /wp 192.168.56.0/24(rw,sync,no_root_squash,no_subtree_check)
 ```
-옵션 설명:
-**rw** : 읽기/쓰기 가능
-**sync** : 요청 즉시 디스크에 기록
-**no_root_squash** : 클라이언트의 root 권한 유지 (WordPress 설치나 퍼미션 문제 피하려면 필요할 수 있음)
+옵션 설명:<br>
+**rw** : 읽기/쓰기 가능<br>
+**sync** : 요청 즉시 디스크에 기록<br>
+**no_root_squash** : 클라이언트의 root 권한 유지 (WordPress 설치나 퍼미션 문제 피하려면 필요할 수 있음)<br>
 **no_subtree_check** : 성능 및 안정성 개선
 
 ### 5) NFS 서비스 시작 및 자동 실행 설정
@@ -611,8 +611,11 @@ sudo firewall-cmd --permanent --add-service=rpc-bind
 sudo firewall-cmd --reload
 ```
 
-### 7) 
+### 7) 확인
+디렉토리 목록과 상세설정이 출력됨
+```
 sudo exportfs -v
+```
 <br><br>
 
 
