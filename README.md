@@ -572,8 +572,80 @@ sudo yum install -y autofs
 ```
 <br><br>
 
+(nfs서버)
+sudo dnf install nfs-utils -y
 
 sudo mkdir -p /wp/wordpress
+[vagrant@nfs ~]$ sudo chown -R nobody:nobody /wp
+[vagrant@nfs ~]$ sudo chmod -R 755 /wp
+
+sudo vi /etc/exports
+/wp 192.168.56.0/24(rw,sync,no_root_squash,no_subtree_check)
+
+sudo systemctl enable --now nfs-server
+
+sudo firewall-cmd --permanent --add-service=nfs
+sudo firewall-cmd --permanent --add-service=mountd
+sudo firewall-cmd --permanent --add-service=rpc-bind
+sudo firewall-cmd --reload
+
+
+sudo exportfs -v
+
+(웹서버)
+sudo yum install -y autofs
+[vagrant@web1 ~]$ sudo vi /etc/auto.master.d/nfs.autofs
+/nfs    /etc/auto.nfs
+[vagrant@web1 ~]$ sudo vi /etc/auto.nfs
+wp -rw,sync 192.168.56.46:/wp
+[vagrant@web1 ~]$ sudo mkdir /nfs
+
+ls /nfs/wp/wordpress
+
+
+sudo vi /etc/httpd/conf.d/wordpress.conf
+DocumentRoot "/nfs/WP/wordpress"
+<VirtualHost *:80>
+        ServerName example.com
+        DocumentRoot "/nfs/wp/wordpress"
+
+        <Directory      "/nfs/wp/wordpress">
+                AllowOverride All
+                Require all granted
+        </Directory>
+
+    ErrorLog logs/wordpress-error.log
+    CustomLog logs/wordpress-access.log combined
+</Virtualhost>
+
+sudo apachectl configtest
+sudo systemctl restart httpd
+
+cd /nfs/wp
+sudo cp /nfs/wp/wordpress/wp-config-sample.php /nfs/wp/wordpress/wp-config.php
+sudo vi /nfs/wp/wordpress/wp-config.php
+
+// ** Database settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wp' );
+
+/** Database username */
+define( 'DB_USER', 'wp-user' );
+
+/** Database password */
+define( 'DB_PASSWORD', 'P@ssw0rd' );
+
+/** Database hostname */
+define( 'DB_HOST', '192.168.57.13' );
+
+/** Database charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
+
+/** The database collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
+
+
+sudo setsebool -P httpd_use_nfs on
 
 <br><br>
 
