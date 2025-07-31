@@ -528,6 +528,8 @@ sudo setsebool -P httpd_can_network_connect_db 1
 # 4. NFS 추가
 웹 서버 2개와 연결할것임.
 
+자동이랑 수동이 있는데 자동으로 할것임임
+
 vagrant 파일
 ```
 # -*- mode: ruby -*-
@@ -555,55 +557,101 @@ end
 <br><br>
 
 
-## 4-1. AutoFS 설치
-<br>
-
-```
-sudo yum install -y autofs
-```
+## 4-1. nfs 서버 설정
 <br><br>
 
 
-## 4-2. AutoFS 설치
-<br>
-
+### 1) NFS-utils 설치
 ```
-sudo yum install -y autofs
-```
-<br><br>
-
-(nfs서버)
 sudo dnf install nfs-utils -y
+```
 
+### 2) 공유폴더 생성
+```
 sudo mkdir -p /wp/wordpress
-[vagrant@nfs ~]$ sudo chown -R nobody:nobody /wp
-[vagrant@nfs ~]$ sudo chmod -R 755 /wp
+```
 
+### 3) 권한 설정
+```
+sudo chown -R nobody:nobody /wp
+```
+```
+sudo chmod -R 755 /wp
+```
+
+### 4) /etc/exports 설정
+```
 sudo vi /etc/exports
+```
+```
 /wp 192.168.56.0/24(rw,sync,no_root_squash,no_subtree_check)
+```
+옵션 설명:
+**rw** : 읽기/쓰기 가능
+**sync** : 요청 즉시 디스크에 기록
+**no_root_squash** : 클라이언트의 root 권한 유지 (WordPress 설치나 퍼미션 문제 피하려면 필요할 수 있음)
+**no_subtree_check** : 성능 및 안정성 개선
 
+### 5) NFS 서비스 시작 및 자동 실행 설정
+```
 sudo systemctl enable --now nfs-server
+```
 
+### 6) 방화벽 설정
+```
 sudo firewall-cmd --permanent --add-service=nfs
+```
+```
 sudo firewall-cmd --permanent --add-service=mountd
+```
+```
 sudo firewall-cmd --permanent --add-service=rpc-bind
+```
+```
 sudo firewall-cmd --reload
+```
 
-
+### 7) 
 sudo exportfs -v
+<br><br>
 
-(웹서버)
+
+## 4-2. 웹 서버 설정
+<br>
+
+### 1) autofs 설치
+```
 sudo yum install -y autofs
-[vagrant@web1 ~]$ sudo vi /etc/auto.master.d/nfs.autofs
+```
+### 2) autofs 설정
+```
+sudo vi /etc/auto.master.d/nfs.autofs
+```
+```
 /nfs    /etc/auto.nfs
-[vagrant@web1 ~]$ sudo vi /etc/auto.nfs
+```
+```
+sudo vi /etc/auto.nfs
+```
+```
 wp -rw,sync 192.168.56.46:/wp
-[vagrant@web1 ~]$ sudo mkdir /nfs
-
+```
+```
+sudo mkdir /nfs
+```
+### 3) 디렉터리가 공유되는지 확인
 ls /nfs/wp/wordpress
+<br><br>
 
 
+## 4-3. 워드프레스 설정 수정
+<br>
+
+### 1) 버츄얼호스트 수정
+```
 sudo vi /etc/httpd/conf.d/wordpress.conf
+```
+```
 DocumentRoot "/nfs/WP/wordpress"
 <VirtualHost *:80>
         ServerName example.com
@@ -617,14 +665,25 @@ DocumentRoot "/nfs/WP/wordpress"
     ErrorLog logs/wordpress-error.log
     CustomLog logs/wordpress-access.log combined
 </Virtualhost>
-
+```
+### 2) 설정파일 확인 및 적용
+```
 sudo apachectl configtest
+```
+```
 sudo systemctl restart httpd
-
+```
+### 3) 워드프레스 db연결 설정
+```
 cd /nfs/wp
+```
+```
 sudo cp /nfs/wp/wordpress/wp-config-sample.php /nfs/wp/wordpress/wp-config.php
+```
+```
 sudo vi /nfs/wp/wordpress/wp-config.php
-
+```
+```
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', 'wp' );
@@ -643,10 +702,11 @@ define( 'DB_CHARSET', 'utf8' );
 
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
-
-
+```
+### 4) nfs http 연결권한 수정
+```
 sudo setsebool -P httpd_use_nfs on
-
+```
 <br><br>
 
 
