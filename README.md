@@ -73,7 +73,7 @@ sudo yum install -y mysql-server
 ```
 sudo yum install -y php
 ```
-### PHP-MySQLND
+### 6) PHP-MySQLND
 MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서버에 직접 연결할 수 있게 해줌
 ```
 sudo yum install -y php-mysqlnd
@@ -81,7 +81,7 @@ sudo yum install -y php-mysqlnd
 <br><br>
 
 
-## 2-1 Apache, WP 설정
+## 1-2 Apache, WP 설정
 <br>
 
 ### 1) Apache 웹 서버
@@ -154,7 +154,7 @@ sudo setsebool -P httpd_can_network_connect_db 1
 <br><br>
 
 
-## 3.1 db설정
+## 1-3 db설정
 <br>
 
 ### 1) MySQLD 시작
@@ -369,6 +369,105 @@ sudo systemctl enable haproxy
 ```
 sudo systemctl start haproxy
 ```
+
+
+## 3-4. 웹서버 (web2 설정)
+<br>
+
+### 1) Apache 웹 서버(httpd) 설치
+```
+sudo yum install -y httpd
+```
+### 2) WordPress 최신 버전 압축 파일 다운로드
+curl / -o 다운도르 시 저장할 이름 / 워드프레스 최신 버전 압축파일 다운로드 url
+```
+curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz
+```
+### 3) php 설치
+워드 프레스는 PHP로 작성되어있어서 php를 설치가 필수
+```
+sudo yum install -y php
+```
+### 4) PHP-MySQLND
+MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서버에 직접 연결할 수 있게 해줌
+```
+sudo yum install -y php-mysqlnd
+```
+## 3-5 Apache, WP 설정
+<br>
+
+### 1) Apache 웹 서버
+웹 서버 시작 및 방화벽 허용
+```
+sudo systemctl start httpd
+```
+```
+sudo firewall-cmd --add-service=http
+```
+### 2) 워드프레스 압축해제
+```
+sudo tar xvf wordpress.tar.gz -C /var/www/html
+```
+```
+ls /var/www/html # 확인용
+```
+### 3) 워드프레스 설정파일에서 db정보 입력
+WordPress 압축을 해제하면 `wp-config-sample.php` 파일이 있
+이를 복사해 실제 설정 파일인 `wp-config.php`로 만든 후, 아래와 같이 DB 정보를 입력
+```
+sudo cp /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
+```
+```
+sudo vi /var/www/html/wordpress/wp-config.php
+```
+```
+// ** Database settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wp' );
+
+/** Database username */
+define( 'DB_USER', 'wp-user' );
+
+/** Database password */
+define( 'DB_PASSWORD', 'P@ssw0rd' );
+
+/** Database hostname */
+define( 'DB_HOST', '192.168.57.13' );
+
+/** Database charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
+
+/** The database collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
+```
+### 4) 가상 호스트 설정
+```
+sudo vi /etc/httpd/conf.d/wordpress.conf
+```
+```
+<VirtualHost *:80>
+        ServerName example.com
+        DocumentRoot    /var/www/html/wordpress
+
+        <Directory      "/var/www/html/wordpress">
+                AllowOverride All
+        </Directory>
+
+</Virtualhost>
+```
+### 5) 설정 적용
+```
+sudo systemctl restart httpd
+```
+### 6) sebool http와 db 연결 설정
+```
+sudo setsebool -P httpd_can_network_connect_db 1
+```
+## 3-6 Apache, WP 설정
+<br>
+
+
+
 <br><br>
 
 
