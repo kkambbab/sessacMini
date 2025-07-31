@@ -764,8 +764,8 @@ sudo setsebool -P httpd_use_nfs on
 
 
 
-
-
+---
+---
 ## 왜 57.1인가?
 [root@server ~]# telnet 192.168.57.13 3306
 Connected to 192.168.57.13.
