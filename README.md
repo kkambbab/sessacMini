@@ -524,10 +524,56 @@ sudo setsebool -P httpd_can_network_connect_db 1
 <br><br>
 
 
-## 3-6 Apache, WP 설정
+---
+# 4. NFS 추가
+웹 서버 2개와 연결할것임.
+
+vagrant 파일
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+vm_image = "nobreak-labs/rocky-9"
+vm_subnet = "192.168."
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "nfs" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "nfs"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "56.46", nic_type: "virtio"
+    node.vm.hostname = "nfs"
+  end
+end
+
+```
+<br><br>
+
+
+## 4-1. AutoFS 설치
 <br>
 
+```
+sudo yum install -y autofs
+```
+<br><br>
 
+
+## 4-2. AutoFS 설치
+<br>
+
+```
+sudo yum install -y autofs
+```
+<br><br>
+
+
+sudo mkdir -p /wp/wordpress
 
 <br><br>
 
