@@ -1,5 +1,41 @@
 # 미니 프로젝트
 <br><br>
+## 초기 vagrant 파일
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+vm_image = "nobreak-labs/rocky-9"
+vm_subnet = "192.168."
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "web1" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "web1"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "56.44", nic_type: "virtio"
+    node.vm.hostname = "web1"
+  end
+
+  config.vm.define "web2" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "web2"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "56.45", nic_type: "virtio"
+    node.vm.hostname = "web2"
+  end
+end
+```
+<br><br>
 
 
 ---
@@ -153,7 +189,7 @@ exit
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 vm_image = "nobreak-labs/rocky-9"
-vm_subnet = "192.168.57."
+vm_subnet = "192.168."
 
 Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
@@ -166,7 +202,8 @@ Vagrant.configure("2") do |config|
       vb.memory = 2048
     end
 
-    node.vm.network "private_network", ip: vm_subnet + "13", nic_type: "virtio"
+    node.vm.network "private_network", ip: vm_subnet + "57.13", nic_type: "virtio"
+    node.vm.network "private_network", ip: vm_subnet + "56.13", nic_type: "virtio"
     node.vm.hostname = "db1"
   end
 
@@ -178,7 +215,8 @@ Vagrant.configure("2") do |config|
       vb.memory = 2048
     end
 
-    node.vm.network "private_network", ip: vm_subnet + "14", nic_type: "virtio"
+    node.vm.network "private_network", ip: vm_subnet + "57.14", nic_type: "virtio"
+    node.vm.network "private_network", ip: vm_subnet + "56.13", nic_type: "virtio"
     node.vm.hostname = "db2"
   end
 end
