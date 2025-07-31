@@ -385,6 +385,18 @@ sudo systemctl start haproxy
 <br><br>
 
 
+## 3-4. 포트 80으로 방화벽 열어주기
+<br>
+
+```
+sudo firewall-cmd --permanent --add-port=80/tcp
+```
+```
+sudo firewall-cmd --reload
+```
+<br><br>
+
+
 ## 3-4. 웹서버 (web2 설정)
 <br>
 
