@@ -339,15 +339,23 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
-<br>
+<br><br>
+
 
 ## 3-1. 로드밸런서 설치
+<br>
+
 HAProxy와 Nginx가 있다.
 HAProxy로 할 예정
 ```
 sudo yum install -y haproxy
 ```
+<br><br>
+
+
 ## 3-2. 로드밸런서 설정
+<br>
+
 ```
 sudo vi /etc/haproxy/haproxy.cfg
 ```
@@ -362,13 +370,18 @@ backend http_back
     server web1 192.168.56.11:80 check
     server web2 192.168.56.12:80 check
 ```
+<br><br>
+
+
 ## 3-3. 로드밸런서 서비스 시작
+<br>
 ```
 sudo systemctl enable haproxy
 ```
 ```
 sudo systemctl start haproxy
 ```
+<br><br>
 
 
 ## 3-4. 웹서버 (web2 설정)
@@ -393,6 +406,9 @@ MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서�
 ```
 sudo yum install -y php-mysqlnd
 ```
+<br><br>
+
+
 ## 3-5 Apache, WP 설정
 <br>
 
@@ -463,6 +479,9 @@ sudo systemctl restart httpd
 ```
 sudo setsebool -P httpd_can_network_connect_db 1
 ```
+<br><br>
+
+
 ## 3-6 Apache, WP 설정
 <br>
 
