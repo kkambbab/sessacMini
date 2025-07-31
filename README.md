@@ -256,7 +256,7 @@ sudo mysql
 create database wp;
 ```
 ```
-CREATE USER 'wp-user'@'192.168.57.1' IDENTIFIED BY 'P@ssw0rd';
+CREATE USER 'wp-user'@'192.168.57.44' IDENTIFIED BY 'P@ssw0rd';
 ```
 ```
 GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.44';
