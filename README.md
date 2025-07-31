@@ -316,7 +316,60 @@ define( 'DB_COLLATE', '' );
 
 
 ---
-# 3. HTTP, WP, MySQL 한 서버에서 연결
+# 3. LoadBalancer 구현
+vagrant파일
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+vm_image = "nobreak-labs/rocky-9"
+vm_subnet = "192.168."
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "lb" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "lb"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "56.10", nic_type: "virtio"
+    node.vm.hostname = "lb"
+  end
+end
+```
+<br>
+
+## 3-1. 로드밸런서 설치
+HAProxy와 Nginx가 있다.
+HAProxy로 할 예정
+```
+sudo yum install -y haproxy
+```
+## 3-2. 로드밸런서 설정
+```
+sudo vi /etc/haproxy/haproxy.cfg
+```
+밑 내용 추가
+```
+frontend http_front
+    bind *:80
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    server web1 192.168.56.11:80 check
+    server web2 192.168.56.12:80 check
+```
+## 3-3. 로드밸런서 서비스 시작
+```
+sudo systemctl enable haproxy
+```
+```
+sudo systemctl start haproxy
+```
 <br><br>
 
 
