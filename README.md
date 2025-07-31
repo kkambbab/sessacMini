@@ -1,5 +1,7 @@
 # 미니 프로젝트
 <br><br>
+
+
 ## 초기 vagrant 파일
 ```
 # -*- mode: ruby -*-
