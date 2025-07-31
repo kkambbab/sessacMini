@@ -385,6 +385,59 @@ sudo systemctl start haproxy
 <br><br>
 
 
+## 3-4. 로그 설정
+<br>
+
+```
+sudo vi /etc/rsyslog.d/haproxy.conf
+```
+```
+# HAProxy log 수신 허용
+module(load="imudp")
+input(type="imudp" port="514")
+
+# HAProxy 로그를 별도 파일로 저장
+local0.*   /var/log/haproxy.log
+```
+rsyslog 재시작
+```
+sudo systemctl restart rsyslog
+```
+```
+sudo vi /etc/haproxy/haproxy.cfg
+```
+```
+global
+    log 127.0.0.1 local0
+    log 127.0.0.1 local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+```
+option httplog 이 없으면 로깅이 작동하지 않음
+HAProxy 재시작
+```
+sudo systemctl restart haproxy
+```
+로그확인
+```
+sudo tail -f /var/log/haproxy.log
+```
+<br><br>
+
+
 ## 3-4. 포트 80으로 방화벽 열어주기
 <br>
 
