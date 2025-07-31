@@ -369,71 +369,31 @@ backend http_back
     balance roundrobin
     server web1 192.168.56.44:80 check
     server web2 192.168.56.45:80 check
+
+# HAProxy Stats Page 설정
+listen stats
+    bind *:8404
+    stats enable
+    stats uri /stats
+    stats refresh 10s
+    stats realm Haproxy\ Statistics
+    stats auth admin:admin  # 사용자명:비밀번호
+
 ```
 <br><br>
 
 
-## 3-3. 로드밸런서 서비스 시작
+## 3-3. HAProxy Stats Page 포트 추가
 <br>
 
 ```
-sudo systemctl enable haproxy
+sudo semanage port -a -t http_port_t -p tcp 8404
 ```
 ```
-sudo systemctl start haproxy
-```
-<br><br>
-
-
-## 3-4. 로그 설정
-<br>
-
-```
-sudo vi /etc/rsyslog.d/haproxy.conf
+sudo firewall-cmd --permanent --add-port=8404/tcp
 ```
 ```
-# HAProxy log 수신 허용
-module(load="imudp")
-input(type="imudp" port="514")
-
-# HAProxy 로그를 별도 파일로 저장
-local0.*   /var/log/haproxy.log
-```
-rsyslog 재시작
-```
-sudo systemctl restart rsyslog
-```
-```
-sudo vi /etc/haproxy/haproxy.cfg
-```
-```
-global
-    log 127.0.0.1 local0
-    log 127.0.0.1 local1 notice
-    chroot /var/lib/haproxy
-    stats socket /run/haproxy/admin.sock mode 660 level admin
-    stats timeout 30s
-    user haproxy
-    group haproxy
-    daemon
-
-defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
-    timeout connect 5000
-    timeout client  50000
-    timeout server  50000
-```
-option httplog 이 없으면 로깅이 작동하지 않음
-HAProxy 재시작
-```
-sudo systemctl restart haproxy
-```
-로그확인
-```
-sudo tail -f /var/log/haproxy.log
+sudo firewall-cmd --reload
 ```
 <br><br>
 
@@ -450,7 +410,29 @@ sudo firewall-cmd --reload
 <br><br>
 
 
-## 3-4. 웹서버 (web2 설정)
+## 3-5. 로드밸런서 서비스 시작
+<br>
+
+```
+sudo systemctl enable haproxy
+```
+```
+sudo systemctl start haproxy
+```
+<br><br>
+
+
+## 3-6. HAProxy 작동 확인
+<br>
+
+HAProxy Stats Page 주소
+```
+http://192.168.56.10:8404/stats
+```
+<br><br>
+
+
+## 3-7. 웹서버 (web2 설정)
 <br>
 
 ### 1) Apache 웹 서버(httpd) 설치
@@ -472,13 +454,7 @@ MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서�
 ```
 sudo yum install -y php-mysqlnd
 ```
-<br><br>
-
-
-## 3-5 Apache, WP 설정
-<br>
-
-### 1) Apache 웹 서버
+### 5) Apache 웹 서버
 웹 서버 시작 및 방화벽 허용
 ```
 sudo systemctl start httpd
@@ -486,14 +462,14 @@ sudo systemctl start httpd
 ```
 sudo firewall-cmd --add-service=http
 ```
-### 2) 워드프레스 압축해제
+### 6) 워드프레스 압축해제
 ```
 sudo tar xvf wordpress.tar.gz -C /var/www/html
 ```
 ```
 ls /var/www/html # 확인용
 ```
-### 3) 워드프레스 설정파일에서 db정보 입력
+### 7) 워드프레스 설정파일에서 db정보 입력
 WordPress 압축을 해제하면 `wp-config-sample.php` 파일이 있
 이를 복사해 실제 설정 파일인 `wp-config.php`로 만든 후, 아래와 같이 DB 정보를 입력
 ```
@@ -522,7 +498,7 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
-### 4) 가상 호스트 설정
+### 8) 가상 호스트 설정
 ```
 sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
@@ -537,11 +513,11 @@ sudo vi /etc/httpd/conf.d/wordpress.conf
 
 </Virtualhost>
 ```
-### 5) 설정 적용
+### 9) 설정 적용
 ```
 sudo systemctl restart httpd
 ```
-### 6) sebool http와 db 연결 설정
+### 10) sebool http와 db 연결 설정
 ```
 sudo setsebool -P httpd_can_network_connect_db 1
 ```
