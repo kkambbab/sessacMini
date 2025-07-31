@@ -367,8 +367,8 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server web1 192.168.56.11:80 check
-    server web2 192.168.56.12:80 check
+    server web1 192.168.57.13:80 check
+    server web2 192.168.57.14:80 check
 ```
 <br><br>
 
