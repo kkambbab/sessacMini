@@ -155,7 +155,7 @@ sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
 sudo systemctl restart httpd
 ```
-### 6) sebool http와 db 연결 설정
+### 6) sebool http와 db 연결 허용
 ```
 sudo setsebool -P httpd_can_network_connect_db 1
 ```
