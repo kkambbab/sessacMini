@@ -181,8 +181,16 @@ grant all privileges on wp.* to 'wp-user'@'192.168.56.44';
 ```
 exit
 ```
+<br><br>
 
 
+## 1-4 테스트
+<br>
+
+### 1) 웹 브라우저 접속
+```
+http://192.168.56.44/
+```
 <br><br>
 
 
