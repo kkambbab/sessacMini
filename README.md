@@ -737,7 +737,9 @@ sudo systemctl enable autofs
 sudo systemctl start autofs
 ```
 ### 3) 디렉터리가 공유되는지 확인
+```
 ls /nfs/wp/wordpress
+```
 <br><br>
 
 
