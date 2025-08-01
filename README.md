@@ -588,7 +588,7 @@ sudo mysql
 CREATE USER 'wp-user'@'192.168.57.45' IDENTIFIED BY 'P@ssw0rd';
 ```
 ```
-GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.44';
+GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.45';
 ```
 <br><br><br><br><br><br>
 
