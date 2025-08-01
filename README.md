@@ -155,10 +155,6 @@ sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
 sudo systemctl restart httpd
 ```
-### 6) sebool http와 db 연결 허용
-```
-sudo setsebool -P httpd_can_network_connect_db 1
-```
 <br><br>
 
 
@@ -167,7 +163,7 @@ sudo setsebool -P httpd_can_network_connect_db 1
 
 ### 1) MySQLD 시작
 ```
-systemctl start mysqld
+sudo systemctl start mysqld
 ```
 ### 2) Apache의 외부 DB 접속 허용
 ```
