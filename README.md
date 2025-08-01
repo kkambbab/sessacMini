@@ -573,8 +573,21 @@ sudo setsebool -P httpd_can_network_connect_db 1
 http://192.168.56.10:8404/stats
 ```
 ### 2) 테스트
+현재 web2는 db설정을 넣지 않아서 web1는 제대로 뜨고 web2는 "Error establishing a database connection"이 뜰것이다.<br>
+접속해서 새로고침을 연속으로 누를 시, 두개가 번갈아가며 뜨는지 확인
 ```
 http://192.168.56.10
+```
+
+### 3) MySQL 안에 web2 유저 데이터 삽입
+```
+sudo mysql
+```
+```
+CREATE USER 'wp-user'@'192.168.57.45' IDENTIFIED BY 'P@ssw0rd';
+```
+```
+GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.44';
 ```
 <br><br><br><br><br><br>
 
