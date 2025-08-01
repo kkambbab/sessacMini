@@ -81,6 +81,11 @@ MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서�
 ```
 sudo yum install -y php-mysqlnd
 ```
+
+### 7) 아파치 db 연결 설정
+```
+ sudo setsebool -P httpd_can_network_connect_db 1
+ ```
 <br><br>
 
 
