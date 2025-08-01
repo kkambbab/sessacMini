@@ -572,6 +572,17 @@ sudo systemctl restart httpd
 ```
 sudo setsebool -P httpd_can_network_connect_db 1
 ```
+<br><br>
+
+
+## 3-6. HAProxy 작동 확인
+<br>
+
+HAProxy Stats Page 주소
+아이디 비번은 상단 로드밸런서 설정에 적혀있는 아이디 비번이다.(admin/admin)
+```
+http://192.168.56.10:8404/stats
+```
 <br><br><br><br><br><br>
 
 
