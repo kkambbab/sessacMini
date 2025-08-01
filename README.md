@@ -167,6 +167,9 @@ sudo systemctl start mysqld
 ```
 ### 2) mysql 안에 유저 데이터 삽입
 ```
+sudo mysql
+```
+```
 create database wp;
 ```
 ```
