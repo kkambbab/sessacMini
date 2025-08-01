@@ -771,6 +771,11 @@ DocumentRoot "/nfs/wp"
 sudo apachectl configtest
 ```
 ```
+[vagrant@web1 ~]$ sudo apachectl configtest
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message # 이거는 그냥 경고 메세지이다.
+Syntax OK
+```
+```
 sudo systemctl restart httpd
 ```
 
