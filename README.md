@@ -252,7 +252,8 @@ Vagrant.configure("2") do |config|
 end
 
 ```
-### 2) 기존 서버 db삭제 (웹 서버)
+### 2) 기존 서버 db삭제 
+**웹 서버에서 진행**
 ```
 sudo systemctl stop mysqld
 ```
@@ -262,7 +263,8 @@ sudo yum remove mysql mysql-server
 <br><br>
 
 
-## 2-2 새로운 db서버 MySQL설정 (db서버)
+## 2-2 새로운 db서버 MySQL설정 
+**db서버에서 진행**
 <br>
 
 ### 1) MySQL, MySQL-Server 설치
