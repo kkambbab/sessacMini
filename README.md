@@ -474,6 +474,7 @@ sudo systemctl start haproxy
 <br>
 
 HAProxy Stats Page 주소
+아이디 비번은 상단 로드밸런서 설정에 적혀있는 아이디 비번이다.(admin/admin)
 ```
 http://192.168.56.10:8404/stats
 ```
