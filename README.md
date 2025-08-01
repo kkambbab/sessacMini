@@ -199,7 +199,11 @@ curl -I http://192.168.56.44/
 ```
 http://192.168.56.44/
 ```
-<br><br>
+<br><br><br><br><br><br>
+
+
+
+
 
 
 ---
@@ -332,7 +336,11 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
-<br><br>
+<br><br><br><br><br><br>
+
+
+
+
 
 
 ---
@@ -542,7 +550,11 @@ sudo systemctl restart httpd
 ```
 sudo setsebool -P httpd_can_network_connect_db 1
 ```
-<br><br>
+<br><br><br><br><br><br>
+
+
+
+
 
 
 ---
