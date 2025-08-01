@@ -481,7 +481,7 @@ http://192.168.56.10:8404/stats
 <br><br>
 
 
-## 3-7. 웹서버 (web2 설정)
+## 3-6. 웹서버 (web2 설정)
 <br>
 
 ### 1) Apache 웹 서버(httpd) 설치
@@ -575,13 +575,17 @@ sudo setsebool -P httpd_can_network_connect_db 1
 <br><br>
 
 
-## 3-6. HAProxy 작동 확인
+## 3-7. HAProxy 작동 확인
 <br>
 
-HAProxy Stats Page 주소
+### 1) HAProxy Stats Page 주소 (HAProxy 정보 페이지)
 아이디 비번은 상단 로드밸런서 설정에 적혀있는 아이디 비번이다.(admin/admin)
 ```
 http://192.168.56.10:8404/stats
+```
+### 2) 테스트
+```
+http://192.168.56.10
 ```
 <br><br><br><br><br><br>
 
