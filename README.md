@@ -253,7 +253,7 @@ end
 
 ```
 ### 2) 기존 서버 db삭제 
-### **웹 서버에서 진행**
+### ** 웹 서버에서 진행 **
 ```
 sudo systemctl stop mysqld
 ```
@@ -264,7 +264,7 @@ sudo yum remove mysql mysql-server
 
 
 ## 2-2 새로운 db서버 MySQL설정 
-### **db서버에서 진행**
+### ** db서버에서 진행 **
 <br>
 
 ### 1) MySQL, MySQL-Server 설치
