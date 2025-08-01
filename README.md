@@ -656,7 +656,7 @@ sudo dnf install nfs-utils -y
 
 ### 2) 공유폴더 생성
 ```
-sudo mkdir -p /wp/wordpress
+sudo mkdir -p /wp
 ```
 
 ### 3) 권한 설정
@@ -738,7 +738,7 @@ sudo systemctl start autofs
 ```
 ### 3) 디렉터리가 공유되는지 확인
 ```
-ls /nfs/wp/wordpress
+ls /nfs/wp
 ```
 <br><br>
 
@@ -751,12 +751,12 @@ ls /nfs/wp/wordpress
 sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
 ```
-DocumentRoot "/nfs/WP/wordpress"
+DocumentRoot "/nfs/wp"
 <VirtualHost *:80>
         ServerName example.com
-        DocumentRoot "/nfs/wp/wordpress"
+        DocumentRoot "/nfs/wp"
 
-        <Directory      "/nfs/wp/wordpress">
+        <Directory      "/nfs/wp">
                 AllowOverride All
                 Require all granted
         </Directory>
@@ -765,6 +765,7 @@ DocumentRoot "/nfs/WP/wordpress"
     CustomLog logs/wordpress-access.log combined
 </Virtualhost>
 ```
+
 ### 2) 설정파일 확인 및 적용
 ```
 sudo apachectl configtest
@@ -772,7 +773,16 @@ sudo apachectl configtest
 ```
 sudo systemctl restart httpd
 ```
-### 3) 워드프레스 db연결 설정
+
+### 3) 워드프레스 압축해제
+```
+sudo tar xvf wordpress.tar.gz -C /nfs/wp
+```
+```
+ls /nfs/wp # 확인용
+```
+
+### 4) 워드프레스 db연결 설정
 ```
 cd /nfs/wp
 ```
@@ -802,6 +812,7 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
+
 ### 4) nfs http 연결권한 수정
 ```
 sudo setsebool -P httpd_use_nfs on
