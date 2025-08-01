@@ -824,6 +824,11 @@ define( 'DB_COLLATE', '' );
 ```
 sudo rm -rf /var/www/html/wordpress
 ```
+
+### 7) 테스트
+```
+http://192.168.56.10
+```
 <br><br>
 
 
