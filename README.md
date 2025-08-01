@@ -789,9 +789,6 @@ ls /nfs/wp # 확인용
 
 ### 4) 워드프레스 db연결 설정
 ```
-cd /nfs/wp
-```
-```
 sudo cp /nfs/wp/wordpress/wp-config-sample.php /nfs/wp/wordpress/wp-config.php
 ```
 ```
