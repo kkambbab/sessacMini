@@ -578,7 +578,6 @@ http://192.168.56.10:8404/stats
 ```
 http://192.168.56.10
 ```
-
 ### 3) MySQL 안에 web2 유저 데이터 삽입
 ### ** db서버에서 진행 **
 ```
@@ -589,6 +588,11 @@ CREATE USER 'wp-user'@'192.168.57.45' IDENTIFIED BY 'P@ssw0rd';
 ```
 ```
 GRANT ALL PRIVILEGES ON wp.* TO 'wp-user'@'192.168.57.45';
+```
+### 4) 테스트
+이제 제대로 뜰거임
+```
+http://192.168.56.10
 ```
 <br><br><br><br><br><br>
 
