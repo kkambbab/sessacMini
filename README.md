@@ -339,6 +339,20 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
+<br><br>
+
+
+## 2-4 테스트
+<br>
+
+### 1) curl로 확인
+```
+curl -I http://192.168.56.44/
+```
+### 2) 웹 브라우저 접속
+```
+http://192.168.56.44/
+```
 <br><br><br><br><br><br>
 
 
