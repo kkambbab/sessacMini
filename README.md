@@ -573,8 +573,8 @@ sudo setsebool -P httpd_can_network_connect_db 1
 http://192.168.56.10:8404/stats
 ```
 ### 2) 테스트
-현재 web2는 db설정을 넣지 않아서 web1는 제대로 뜨고 web2는 "Error establishing a database connection"이 뜰것이다.<br>
-접속해서 새로고침을 연속으로 누를 시, 두개가 번갈아가며 뜨는지 확인
+현재 web2는 db서버에 유저를 추가하지 않아서 web1는 제대로 뜨고 web2는 "Error establishing a database connection"이 뜰것이다.<br>
+접속해서 새로고침을 연속으로 누를 시, web1,web2가 번갈아가며 뜨는지 확인
 ```
 http://192.168.56.10
 ```
