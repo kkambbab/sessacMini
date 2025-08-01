@@ -165,11 +165,7 @@ sudo systemctl restart httpd
 ```
 sudo systemctl start mysqld
 ```
-### 2) Apache의 외부 DB 접속 허용
-```
-setsebool -P httpd_can_network_connect_db 1
-```
-### 3) mysql 안에 유저 데이터 삽입
+### 2) mysql 안에 유저 데이터 삽입
 ```
 create database wp;
 ```
