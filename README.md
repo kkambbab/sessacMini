@@ -493,32 +493,34 @@ curl / -o 다운도르 시 저장할 이름 / 워드프레스 최신 버전 압�
 ```
 curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz
 ```
-### 3) php 설치
+### 3) php, PHP-MySQLND 설치
 워드 프레스는 PHP로 작성되어있어서 php를 설치가 필수
 ```
-sudo yum install -y php
+sudo yum install -y php php-mysqlnd
 ```
-### 4) PHP-MySQLND
-MySQL Native Driver를 기반으로하는 PHP 확장도구. PHP에서 MySQL 서버에 직접 연결할 수 있게 해줌
-```
-sudo yum install -y php-mysqlnd
-```
-### 5) Apache 웹 서버
+### 4) Apache 웹 서버
+웹 서버 시작 및 방화벽 허용
 웹 서버 시작 및 방화벽 허용
 ```
 sudo systemctl start httpd
 ```
 ```
-sudo firewall-cmd --add-service=http
+sudo systemctl enable httpd
 ```
-### 6) 워드프레스 압축해제
+```
+sudo firewall-cmd --permanent --add-service=http
+```
+```
+sudo firewall-cmd --reload
+```
+### 5) 워드프레스 압축해제
 ```
 sudo tar xvf wordpress.tar.gz -C /var/www/html
 ```
 ```
 ls /var/www/html # 확인용
 ```
-### 7) 워드프레스 설정파일에서 db정보 입력
+### 6) 워드프레스 설정파일에서 db정보 입력
 WordPress 압축을 해제하면 `wp-config-sample.php` 파일이 있
 이를 복사해 실제 설정 파일인 `wp-config.php`로 만든 후, 아래와 같이 DB 정보를 입력
 ```
@@ -547,7 +549,7 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
-### 8) 가상 호스트 설정
+### 7) 가상 호스트 설정
 ```
 sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
@@ -562,11 +564,11 @@ sudo vi /etc/httpd/conf.d/wordpress.conf
 
 </Virtualhost>
 ```
-### 9) 설정 적용
+### 8) 설정 적용
 ```
 sudo systemctl restart httpd
 ```
-### 10) sebool http와 db 연결 설정
+### 9) sebool http와 db 연결 설정
 ```
 sudo setsebool -P httpd_can_network_connect_db 1
 ```
