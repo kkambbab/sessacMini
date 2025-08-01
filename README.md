@@ -813,7 +813,12 @@ define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 ```
 
-### 4) nfs http 연결권한 수정
+### 5) 원래 wordpress폴더 삭제
+```
+sudo rm -rf /var/www/html/wordpress
+```
+
+### 6) nfs http 연결권한 수정
 ```
 sudo setsebool -P httpd_use_nfs on
 ```
