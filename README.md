@@ -846,9 +846,35 @@ http://192.168.56.10
 
 
 
-
+---
 # 5. 데이터베이스 iscsi 연결
+**vagrant파일**
+```
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+vm_image = "nobreak-labs/rocky-9"
+vm_subnet = "192.168."
 
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "iscsi" do |node|
+    node.vm.box = vm_image
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "iscsi"
+      vb.cpus = 2
+      vb.memory = 2048
+    end
+
+    node.vm.network "private_network", ip: vm_subnet + "57.15", nic_type: "virtio"
+    node.vm.hostname = "iscsi"
+  end
+end
+```
+<br><br>
+
+
+## 5-1. 
 
 
 
