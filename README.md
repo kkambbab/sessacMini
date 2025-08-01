@@ -92,7 +92,13 @@ sudo yum install -y php-mysqlnd
 sudo systemctl start httpd
 ```
 ```
-sudo firewall-cmd --add-service=http
+sudo systemctl enable httpd
+```
+```
+sudo firewall-cmd --permanent --add-service=http
+```
+```
+sudo firewall-cmd --reload
 ```
 ### 2) 워드프레스 압축해제
 ```
