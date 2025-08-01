@@ -766,12 +766,17 @@ DocumentRoot "/nfs/wp/wordpress"
 </Virtualhost>
 ```
 
-### 2) nfs http 연결권한 수정
+### 2) 원래 wordpress폴더 삭제
+```
+sudo rm -rf /var/www/html/wordpress
+```
+
+### 3) nfs http 연결권한 수정
 ```
 sudo setsebool -P httpd_use_nfs on
 ```
 
-### 3) 설정파일 확인 및 적용
+### 4) 설정파일 확인 및 적용
 ```
 sudo apachectl configtest
 ```
@@ -784,8 +789,13 @@ Syntax OK
 ```
 sudo systemctl restart httpd
 ```
+<br><br>
 
-### 4) 워드프레스 압축해제
+
+## 4-4. 여기는 web1이나 web2 둘중 아무데나에서 한번만 해주면 됨
+<br>
+
+### 1) 워드프레스 압축해제
 ```
 sudo tar xvf wordpress.tar.gz -C /nfs/wp
 ```
@@ -793,7 +803,7 @@ sudo tar xvf wordpress.tar.gz -C /nfs/wp
 ls /nfs/wp # 확인용
 ```
 
-### 5) 워드프레스 db연결 설정
+### 2) 워드프레스 db연결 설정
 ```
 sudo cp /nfs/wp/wordpress/wp-config-sample.php /nfs/wp/wordpress/wp-config.php
 ```
@@ -821,16 +831,18 @@ define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 ```
 
-### 6) 원래 wordpress폴더 삭제
-```
-sudo rm -rf /var/www/html/wordpress
-```
-
-### 7) 테스트
+### 3) 테스트
 ```
 http://192.168.56.10
 ```
-<br><br>
+<br><br><br><br><br><br>
+
+
+
+
+
+
+# 5. 데이터베이스 iscsi 연결
 
 
 
