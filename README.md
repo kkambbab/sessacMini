@@ -751,12 +751,12 @@ ls /nfs/wp
 sudo vi /etc/httpd/conf.d/wordpress.conf
 ```
 ```
-DocumentRoot "/nfs/wp"
+DocumentRoot "/nfs/wp/wordpress"
 <VirtualHost *:80>
         ServerName example.com
-        DocumentRoot "/nfs/wp"
+        DocumentRoot "/nfs/wp/wordpress"
 
-        <Directory      "/nfs/wp">
+        <Directory      "/nfs/wp/wordpress">
                 AllowOverride All
                 Require all granted
         </Directory>
