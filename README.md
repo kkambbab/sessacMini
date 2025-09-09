@@ -880,6 +880,99 @@ end
 
 ## 5-1. 
 <br><br>
+5. 데이터베이스 iSCSI 연결 (Vagrant 환경 기준)
+
+이 단계는 iscsi VM을 iSCSI Target (디스크를 제공하는 서버)으로, db1 VM을 iSCSI Initiator (디스크를 사용하는 클라이언트)로 설정하는 것입니다.5-1. iSCSI Target 서버 구성 (iscsi VM에서 진행)
+
+iscsi VM에 접속하여 iSCSI Target (LIO)을 설정합니다. MySQL 데이터가 저장될 10GB 크기의 논리 볼륨을 생성하고 이를 iSCSI로 외부에 노출합니다.
+필요 패키지 설치:
+
+sudo dnf install -y targetcli
+데이터 저장용 디스크 준비:
+
+가상 머신에 추가된 디스크 (예: /dev/sdb 또는 vdb)를 사용합니다. 여기서는 10GB 크기의 이미지를 만들어서 사용하는 것으로 가정합니다. 실제 운영 환경에서는 별도의 물리/가상 디스크를 LVM 등으로 구성하는 것이 좋습니다.
+
+sudo mkdir -p /iscsi_data
+sudo dd if=/dev/zero of=/iscsi_data/mysql_disk.img bs=1M count=10240 # 10GB 이미지 파일 생성
+targetcli를 사용하여 iSCSI Target 설정:
+
+sudo targetclitargetcli 쉘에서 다음 명령어를 순서대로 입력합니다.
+
+# 백엔드 스토어 생성 (여기서는 이미지 파일 사용)
+/backstores/fileio create mysql_file /iscsi_data/mysql_disk.img
+
+# iSCSI Target 생성
+/iscsi create iqn.2025-08.com.example:mysql.target
+
+# TPG(Target Portal Group) 및 LUN(Logical Unit Number) 설정
+# 위에서 생성한 백엔드 스토어를 LUN으로 연결
+/iscsi/iqn.2025-08.com.example:mysql.target/tpg1/luns create /backstores/fileio/mysql_file
+
+# ACL(Access Control List) 설정: db1 VM의 iSCSI Initiator IQN을 허용
+# 이 부분은 'db1' VM에서 'InitiatorName'을 확인한 후 정확한 값으로 대체해야 합니다.
+# 일단 임시로 "iqn.1993-08.org.debian:01:db1-client"와 같이 입력하고, db1에서 확인 후 다시 수정할 수 있습니다.
+# 또는 테스트를 위해 "AUTHENTICATION_DISABLED"를 사용하여 ACL을 비활성화할 수도 있습니다 (보안상 권장되지 않음).
+/iscsi/iqn.2025-08.com.example:mysql.target/tpg1/acls create iqn.1993-08.org.debian:01:db1-client # db1 VM의 실제 InitiatorName으로 대체
+
+# 포털 설정: iSCSI Target 서버의 IP (iscsi VM의 192.168.57.15)
+/iscsi/iqn.2025-08.com.example:mysql.target/tpg1/portals create 192.168.57.15
+
+# 설정 저장 및 종료
+saveconfig
+exit
+방화벽 설정:
+
+iSCSI 기본 포트(3260/tcp)를 허용합니다.
+
+sudo firewall-cmd --permanent --add-port=3260/tcp
+sudo firewall-cmd --reload
+iSCSI Target 서비스 시작 및 자동 실행:
+
+sudo systemctl enable --now target
+5-2. iSCSI Initiator 클라이언트 구성 (db1 VM에서 진행)
+
+db1 VM에 접속하여 iSCSI Initiator를 설정하고, iscsi VM이 제공하는 디스크를 연결하고 마운트합니다.
+필요 패키지 설치:
+
+sudo yum install -y iscsi-initiator-utils
+iSCSI Initiator Name 확인:
+
+이 값은 위 iscsi VM의 targetcli에서 ACL 설정 시 사용됩니다.
+
+cat /etc/iscsi/initiatorname.iscsi
+# 출력 예시: InitiatorName=iqn.1993-08.org.debian:01:db1-client (이 값을 iscsi VM의 ACL에 추가해야 함)주의: 만약 iscsi VM에서 targetcli의 ACL 설정을 이 값으로 하지 않았다면, iscsi VM으로 돌아가 targetcli에서 acls를 수정하고 saveconfig를 다시 해야 합니다.
+iSCSI Target 디스커버리:
+
+iscsi VM의 IP 주소로 iSCSI Target을 검색합니다.
+
+sudo iscsiadm -m discovery -t st -p 192.168.57.15명령어 실행 후, iqn.2025-08.com.example:mysql.target 와 같은 Target IQN이 출력되는지 확인합니다.
+iSCSI Target에 로그인:
+
+디스커버리된 Target에 로그인하여 디스크를 연결합니다.
+
+sudo iscsiadm -m node -l로그인 성공 시, /dev/sdX (X는 a, b, c 등) 형태의 새 블록 디바이스가 생성됩니다. sudo fdisk -l 명령어로 확인해볼 수 있습니다.
+새 디스크 포맷 및 마운트:
+
+새로 연결된 iSCSI 디스크를 포맷하고 MySQL 데이터 디렉토리에 마운트합니다.
+
+(새로운 디스크 장치가 /dev/sdb로 할당되었다고 가정합니다. 실제 장치명은 다를 수 있으니 fdisk -l 등으로 확인하세요.)
+
+sudo mkfs.ext4 /dev/sdb # 또는 다른 파일 시스템 (xfs 등)
+sudo mkdir -p /var/lib/mysql_data # MySQL 데이터가 저장될 새로운 경로
+sudo mount /dev/sdb /var/lib/mysql_data
+/etc/fstab에 추가 (재부팅 시 자동 마운트):
+
+재부팅 후에도 자동으로 마운트되도록 /etc/fstab에 추가합니다. _netdev 옵션은 네트워크 장치가 활성화된 후 마운트되도록 합니다.
+
+/etc/fstab 파일을 열고 다음 줄을 추가합니다.
+
+# UUID를 사용하여 안정적인 마운트 권장 (UUID는 blkid 명령어로 확인)
+# sudo blkid /dev/sdb
+# 예: UUID="YOUR_DISK_UUID" /var/lib/mysql_data ext4 _netdev,defaults 0 0
+/dev/sdb /var/lib/mysql_data ext4 _netdev,defaults 0 0추가 후 sudo mount -a 명령어로 오류가 없는지 확인합니다.
+MySQL 데이터 경로 변경:
+
+MySQL의 기본 데이터 저장 경로를 iSCSI로 마운트된 /var/lib/mysql_data로 변경해야 합니다.
 
 
 
