@@ -852,7 +852,7 @@ http://192.168.56.10
 
 ---
 # 5. 데이터베이스 iscsi 연결
-![iscsi](image/iscasi1.drawio.png)
+![iscsi](image/iscsi1.drawio.png)
 **vagrant파일**
 ```
 # -*- mode: ruby -*-
@@ -983,7 +983,7 @@ MySQL의 기본 데이터 저장 경로를 iSCSI로 마운트된 /var/lib/mysql_
 
 
 6. 데이터베이스 이중화
-   ![데이터베이스이중화](image/iscasi2.png)
+   ![데이터베이스이중화](image/iscsi2.png)
 
 
 
